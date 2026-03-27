@@ -129,6 +129,7 @@ const scrollLeftBtn = document.getElementById("scrollLeft");
 const scrollRightBtn = document.getElementById("scrollRight");
 const cartBody = document.getElementById("cartBody");
 const cartPanel = document.getElementById("cartPanel");
+const cartScrim = document.getElementById("cartScrim");
 const closeCart = document.getElementById("closeCart");
 const snackbar = document.getElementById("snackbar");
 
@@ -395,10 +396,21 @@ const toggleCart = (open) => {
   if (!cartPanel) return;
   cartPanel.classList.toggle("open", open);
   document.body.classList.toggle("cart-open", open);
+  cartPanel.setAttribute("aria-hidden", String(!open));
+  if (cartScrim) {
+    cartScrim.hidden = !open;
+  }
 };
 
 cartToggleBtn?.addEventListener("click", () => toggleCart(true));
 closeCart?.addEventListener("click", () => toggleCart(false));
+cartScrim?.addEventListener("click", () => toggleCart(false));
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    toggleCart(false);
+  }
+});
 
 checkoutBtn?.addEventListener("click", () => {
   const entries = Object.values(cart);
