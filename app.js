@@ -214,7 +214,13 @@ const createCategoryTabs = () => {
 const renderCard = (product) => `
   <article class="product-card">
     <p class="product-badge">${product.badge}</p>
-    <img class="product-image" src="${product.image}" alt="${product.name}" loading="lazy" />
+    <img
+      class="product-image"
+      src="${product.image}"
+      alt="${product.name}"
+      loading="lazy"
+      onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 360%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop stop-color=%22%23fff2f7%22/%3E%3Cstop offset=%221%22 stop-color=%22%23eef7ff%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22600%22 height=%22360%22 rx=%2236%22 fill=%22url(%23g)%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22Arial,sans-serif%22 font-size=%2232%22 fill=%22%234a4652%22%3E${encodeURIComponent(product.name)}%3C/text%3E%3C/svg%3E';"
+    />
     <h3 class="product-name">${product.name}</h3>
     <p class="product-desc">${product.desc}</p>
     <div class="price-stack">
