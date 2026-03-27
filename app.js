@@ -132,49 +132,10 @@ const cartPanel = document.getElementById("cartPanel");
 const closeCart = document.getElementById("closeCart");
 const snackbar = document.getElementById("snackbar");
 
-const cartCountSpan = document.getElementById("cartCount");
-const cartFooter = document.querySelector(".cart-footer");
-const checkoutBtn = document.getElementById("checkoutBtn");
-if (cartFooter) {
-  cartFooter.remove();
-}
-
-const viewCartExisting = document.getElementById("cartToggle");
-if (viewCartExisting) {
-  viewCartExisting.remove();
-}
-
-const appShell = document.querySelector(".app-shell");
-const footer = document.createElement("footer");
-footer.className = "mobile-footer";
-
-const viewCartBtn = document.createElement("button");
-viewCartBtn.id = "viewCartBtn";
-viewCartBtn.className = "ghost-btn";
-viewCartBtn.type = "button";
-viewCartBtn.append("View cart (");
-viewCartBtn.append(cartCountSpan);
-viewCartBtn.append(")");
-
-const footerCheckout = document.createElement("div");
-footerCheckout.className = "footer-checkout";
-footerCheckout.innerHTML = `
-  <div class="footer-total">
-    <span>Total</span>
-    <strong id="footerTotal">$0.00</strong>
-  </div>
-`;
-
-if (checkoutBtn) {
-  checkoutBtn.textContent = "Checkout";
-  footerCheckout.appendChild(checkoutBtn);
-}
-
-footer.append(viewCartBtn, footerCheckout);
-appShell.appendChild(footer);
-
-const footerTotalEl = document.getElementById("footerTotal");
+const cartToggleBtn = document.getElementById("cartToggle");
 const cartCountEl = document.getElementById("cartCount");
+const cartTotalEl = document.getElementById("cartTotal");
+const checkoutBtn = document.getElementById("checkoutBtn");
 
 const cart = {};
 
@@ -352,10 +313,12 @@ const updateCartDisplay = () => {
   if (cartCountEl) {
     cartCountEl.textContent = entries.reduce((sum, entry) => sum + entry.qty, 0);
   }
-  if (footerTotalEl) {
-    footerTotalEl.textContent = formatPrice(
-      entries.reduce((sum, entry) => sum + entry.qty * entry.item.price, 0)
-    );
+  const total = entries.reduce((sum, entry) => sum + entry.qty * entry.item.price, 0);
+  if (cartTotalEl) {
+    cartTotalEl.textContent = formatPrice(total);
+  }
+  if (checkoutBtn) {
+    checkoutBtn.disabled = !entries.length;
   }
 
   if (!entries.length) {
@@ -429,14 +392,15 @@ cartBody.addEventListener("click", (event) => {
 });
 
 const toggleCart = (open) => {
+  if (!cartPanel) return;
   cartPanel.classList.toggle("open", open);
   document.body.classList.toggle("cart-open", open);
 };
 
-viewCartBtn.addEventListener("click", () => toggleCart(true));
-closeCart.addEventListener("click", () => toggleCart(false));
+cartToggleBtn?.addEventListener("click", () => toggleCart(true));
+closeCart?.addEventListener("click", () => toggleCart(false));
 
-checkoutBtn.addEventListener("click", () => {
+checkoutBtn?.addEventListener("click", () => {
   const entries = Object.values(cart);
   if (!entries.length) {
     showSnackbar("Your cart is empty. Add a treat first.");
