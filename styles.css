@@ -69,16 +69,14 @@ body::before {
   overflow: visible;
   isolation: isolate;
   min-height: 0;
-}
-
-.hero-image {
-  display: none;
+  display: flex;
+  justify-content: center;
 }
 
 .hero-logo {
-  height: 11rem;
-  width: auto;
-  max-width: min(88vw, 520px);
+  height: auto;
+  width: min(96vw, 760px);
+  max-width: none;
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -685,13 +683,8 @@ body.cart-open .cart-scrim {
     right: 0.1rem;
   }
 
-  .hero {
-    padding: 0;
-  }
-
   .hero-logo {
-    height: 9rem;
-    max-width: min(92vw, 360px);
+    width: min(98vw, 520px);
   }
 
   .app-shell {
