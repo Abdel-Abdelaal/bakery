@@ -141,13 +141,6 @@ body::before {
   object-fit: contain;
 }
 
-.hero-social {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.45rem;
-  justify-content: center;
-}
-
 .hero-social__item {
   width: 2.75rem;
   height: 2.75rem;
@@ -164,6 +157,13 @@ body::before {
 .hero-social__item:focus-visible {
   transform: translateY(-2px);
   border-color: rgba(140, 82, 157, 0.6);
+}
+
+.social-strip {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
 }
 
 .visually-hidden {
