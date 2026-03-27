@@ -164,6 +164,8 @@ body::before {
   align-items: center;
   gap: 0.4rem;
   margin: 0.25rem 0 1rem;
+  width: 100%;
+  overflow: hidden;
 }
 
 .carousel-arrow {
@@ -192,6 +194,9 @@ body::before {
   padding-bottom: 1rem;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
 }
 .product-grid::-webkit-scrollbar {
   display: none;
@@ -210,7 +215,8 @@ body::before {
   padding: 0.9rem 1rem 1rem;
   border: 1px solid rgba(140, 82, 157, 0.15);
   box-shadow: var(--card-shadow);
-  min-width: min(88vw, 440px);
+  min-width: min(85vw, 380px);
+  max-width: min(90vw, 400px);
   flex: 0 0 auto;
   scroll-snap-align: start;
 }
@@ -522,7 +528,35 @@ body::before {
 
 @media (max-width: 640px) {
   .category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .category-section {
+    min-width: min(90vw, 360px);
+    padding: 0.8rem 0.9rem 0.9rem;
+  }
+
+  .category-tabs button {
+    font-size: 0.74rem;
+    padding: 0.3rem 0.7rem;
+  }
+
+  .carousel-arrow {
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1.15rem;
+  }
+
+  .hero {
+    padding: 0.7rem 1rem;
+  }
+
+  .hero-image {
+    display: none;
+  }
+
+  .app-shell {
+    padding: 1rem 0.8rem 5.5rem;
   }
 
   .mobile-footer {
