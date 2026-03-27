@@ -394,11 +394,21 @@ cartBody.addEventListener("click", (event) => {
 
 const toggleCart = (open) => {
   if (!cartPanel) return;
+  if (open) {
+    cartPanel.hidden = false;
+  }
   cartPanel.classList.toggle("open", open);
   document.body.classList.toggle("cart-open", open);
   cartPanel.setAttribute("aria-hidden", String(!open));
   if (cartScrim) {
     cartScrim.hidden = !open;
+  }
+  if (!open) {
+    window.setTimeout(() => {
+      if (!cartPanel.classList.contains("open")) {
+        cartPanel.hidden = true;
+      }
+    }, 220);
   }
 };
 
