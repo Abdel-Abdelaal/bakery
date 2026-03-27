@@ -438,7 +438,7 @@ main {
 
 .cart-panel {
   position: fixed;
-  inset: auto 0 0;
+  inset: auto 0 calc(4.9rem + env(safe-area-inset-bottom));
   margin: 0 auto;
   width: min(480px, 100%);
   transform: translateY(100%);
@@ -624,6 +624,7 @@ main {
   }
 
   .cart-panel {
+    inset: auto 0 0 auto;
     right: 2rem;
     left: auto;
     width: 360px;
