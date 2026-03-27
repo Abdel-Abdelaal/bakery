@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Midnight Bakehouse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,7 +24,7 @@
       <main>
         <section class="section-head">
           <div>
-            <p class="section-title">Todayâ€™s treats</p>
+            <p class="section-title">Today's treats</p>
             <p class="section-subtitle">Simple, curated, ready to go</p>
           </div>
           <button id="cartToggle" class="ghost-btn" type="button">
@@ -32,17 +32,27 @@
           </button>
         </section>
 
-      <div class="carousel-wrapper">
-        <button id="scrollLeft" class="carousel-arrow" type="button" aria-label="Show previous sections">‹</button>
-        <div id="productGrid" class="product-grid"></div>
-        <button id="scrollRight" class="carousel-arrow" type="button" aria-label="Show next sections">›</button>
-      </div>
-    </main>
+        <div class="carousel-wrapper">
+          <button
+            id="scrollLeft"
+            class="carousel-arrow carousel-arrow-left"
+            type="button"
+            aria-label="Show previous sections"
+          ></button>
+          <div id="productGrid" class="product-grid"></div>
+          <button
+            id="scrollRight"
+            class="carousel-arrow carousel-arrow-right"
+            type="button"
+            aria-label="Show next sections"
+          ></button>
+        </div>
+      </main>
 
       <aside class="cart-panel" id="cartPanel" aria-live="polite">
         <div class="cart-header">
           <p>Your quick cart</p>
-          <button id="closeCart" class="icon-btn" type="button">âœ•</button>
+          <button id="closeCart" class="icon-btn" type="button" aria-label="Close cart">&times;</button>
         </div>
         <div class="cart-body" id="cartBody">
           <p class="cart-empty">Add something sweet to get started.</p>
@@ -60,5 +70,3 @@
     </div>
   </body>
 </html>
-
-

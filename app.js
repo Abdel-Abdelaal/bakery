@@ -185,14 +185,14 @@ const createCategoryTabs = () => {
   tabs.className = "category-tabs";
   tabs.innerHTML = categoryFilters
     .map(
-      (category) => `<button type="button" data-target="${category.id}"${category.id === activeCategory ? " class=\"active\"" : ""}>${category.label}</button>`
+      (category) => `<button type="button" data-target="${category.id}"${category.id === activeCategory ? ' class="active"' : ""}>${category.label}</button>`
     )
     .join("");
   sectionHead.insertAdjacentElement("afterend", tabs);
 
   const searchWrapper = document.createElement("div");
   searchWrapper.className = "search-bar";
-  searchWrapper.innerHTML = `<input type="search" aria-label="Search treats" placeholder="Search treats" value="" />`;
+  searchWrapper.innerHTML = '<input type="search" aria-label="Search treats" placeholder="Search treats" value="" />';
   tabs.insertAdjacentElement("afterend", searchWrapper);
 
   const searchInput = searchWrapper.querySelector("input");
@@ -225,38 +225,68 @@ const renderCard = (product) => `
   </article>
 `;
 
+const getSections = () => Array.from(productGrid?.querySelectorAll(".category-section") ?? []);
+
+const getSectionOffsets = () => getSections().map((section) => section.offsetLeft);
+
+const getCurrentSectionIndex = () => {
+  const offsets = getSectionOffsets();
+  if (!offsets.length || !productGrid) return 0;
+
+  const current = productGrid.scrollLeft;
+  let closestIndex = 0;
+  let closestDistance = Number.POSITIVE_INFINITY;
+
+  offsets.forEach((offset, index) => {
+    const distance = Math.abs(offset - current);
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestIndex = index;
+    }
+  });
+
+  return closestIndex;
+};
+
 const updateArrowState = () => {
   if (!productGrid || !scrollLeftBtn || !scrollRightBtn) return;
-  const maxScroll = productGrid.scrollWidth - productGrid.clientWidth;
-  const threshold = 5;
-  scrollLeftBtn.disabled = productGrid.scrollLeft <= threshold;
-  scrollRightBtn.disabled = productGrid.scrollLeft >= maxScroll - threshold || maxScroll <= 0;
+
+  const sections = getSections();
+  if (sections.length <= 1) {
+    scrollLeftBtn.disabled = true;
+    scrollRightBtn.disabled = true;
+    return;
+  }
+
+  const currentIndex = getCurrentSectionIndex();
+  scrollLeftBtn.disabled = currentIndex === 0;
+  scrollRightBtn.disabled = currentIndex >= sections.length - 1;
 };
 
 const scrollToSection = (direction) => {
   if (!productGrid) return;
-  const sections = Array.from(productGrid.querySelectorAll(".category-section"));
-  const current = productGrid.scrollLeft;
-  if (!sections.length) {
-    productGrid.scrollBy({ left: direction * productGrid.clientWidth * 0.7, behavior: "smooth" });
-    return;
-  }
-  const target =
-    direction > 0
-      ? sections.find((section) => section.offsetLeft > current + 5)
-      : [...sections].reverse().find((section) => section.offsetLeft < current - 5);
-  if (target) {
-    productGrid.scrollTo({ left: target.offsetLeft, behavior: "smooth" });
-  } else {
-    productGrid.scrollBy({ left: direction * productGrid.clientWidth * 0.7, behavior: "smooth" });
-  }
+
+  const sections = getSections();
+  if (!sections.length) return;
+
+  const currentIndex = getCurrentSectionIndex();
+  const nextIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
+  const targetSection = sections[nextIndex];
+
+  if (!targetSection) return;
+
+  productGrid.scrollTo({
+    left: targetSection.offsetLeft,
+    behavior: "smooth"
+  });
 };
 
 const renderProducts = () => {
   const normalized = (text) => text.toLowerCase();
   const filteredItems = menu.filter((item) => {
     const matchesCategory = activeCategory === "all" || item.category === activeCategory;
-    const matchesSearch = !searchTerm || normalized(item.name).includes(searchTerm) || normalized(item.desc).includes(searchTerm);
+    const matchesSearch =
+      !searchTerm || normalized(item.name).includes(searchTerm) || normalized(item.desc).includes(searchTerm);
     return matchesCategory && matchesSearch;
   });
 
@@ -280,8 +310,8 @@ const renderProducts = () => {
     .join("");
 
   productGrid.innerHTML = sections || '<p class="empty-state">No treats match that search yet.</p>';
-  productGrid.scrollLeft = 0;
-  updateArrowState();
+  productGrid.scrollTo({ left: 0, behavior: "auto" });
+  requestAnimationFrame(updateArrowState);
 };
 
 const updateCartDisplay = () => {
@@ -306,10 +336,10 @@ const updateCartDisplay = () => {
       <div class="cart-item">
         <div class="cart-item-main">
           <p class="cart-item-title">${item.name}</p>
-          <p class="cart-item-desc">${formatPrice(item.price)} × ${qty}</p>
+          <p class="cart-item-desc">${formatPrice(item.price)} x ${qty}</p>
         </div>
         <div class="cart-item-controls">
-          <button class="control-btn" data-id="${item.id}" data-action="decrease">–</button>
+          <button class="control-btn" data-id="${item.id}" data-action="decrease">-</button>
           <span>${qty}</span>
           <button class="control-btn" data-id="${item.id}" data-action="increase">+</button>
         </div>
@@ -347,13 +377,13 @@ const showSnackbar = (text) => {
 productGrid.addEventListener("click", (event) => {
   const btn = event.target.closest("button[data-id]");
   if (!btn) return;
-  const id = btn.dataset.id;
-  addToCart(id);
+  addToCart(btn.dataset.id);
 });
 
 cartBody.addEventListener("click", (event) => {
-  if (!event.target.dataset.action) return;
-  const { id, action } = event.target.dataset;
+  const actionButton = event.target.closest("button[data-action]");
+  if (!actionButton) return;
+  const { id, action } = actionButton.dataset;
   changeQuantity(id, action === "increase" ? 1 : -1);
 });
 
@@ -372,7 +402,7 @@ checkoutBtn.addEventListener("click", () => {
   }
 
   checkoutBtn.disabled = true;
-  checkoutBtn.textContent = "Sending to Stripe…";
+  checkoutBtn.textContent = "Sending to Stripe...";
 
   fetch("/.netlify/functions/create-checkout-session", {
     method: "POST",
@@ -400,7 +430,7 @@ checkoutBtn.addEventListener("click", () => {
     .catch((error) => {
       console.error(error);
       showSnackbar("Could not start checkout. Try again soon.");
-  })
+    })
     .finally(() => {
       checkoutBtn.disabled = false;
       checkoutBtn.textContent = "Checkout";
@@ -409,7 +439,7 @@ checkoutBtn.addEventListener("click", () => {
 
 scrollLeftBtn?.addEventListener("click", () => scrollToSection(-1));
 scrollRightBtn?.addEventListener("click", () => scrollToSection(1));
-productGrid?.addEventListener("scroll", updateArrowState);
+productGrid?.addEventListener("scroll", updateArrowState, { passive: true });
 window.addEventListener("resize", updateArrowState);
 
 createCategoryTabs();
