@@ -453,6 +453,10 @@ main {
   transform: translateY(0);
 }
 
+body.cart-open .cart-panel {
+  inset: auto 0 0;
+}
+
 .cart-header,
 .cart-footer {
   padding: 1rem 1.25rem;
@@ -550,6 +554,13 @@ main {
   max-width: 100vw;
   box-sizing: border-box;
   overflow: hidden;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+body.cart-open .mobile-footer {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(110%);
 }
 
 .cart-item-total {

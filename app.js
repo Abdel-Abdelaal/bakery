@@ -430,6 +430,7 @@ cartBody.addEventListener("click", (event) => {
 
 const toggleCart = (open) => {
   cartPanel.classList.toggle("open", open);
+  document.body.classList.toggle("cart-open", open);
 };
 
 viewCartBtn.addEventListener("click", () => toggleCart(true));
