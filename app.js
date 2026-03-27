@@ -19,7 +19,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1505253758473-5cc0c0a7d8f4?auto=format&fit=crop&w=480&q=80",
     category: "brownies",
-    basePrice: 760
+    basePrice: 760,
+    ingredients: ["Dark cocoa", "Espresso nibs", "Sea salt", "Brown butter", "Hazelnut dust"]
   },
   {
     id: "caramel-brownie",
@@ -29,7 +30,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=480&q=80",
     category: "brownies",
-    basePrice: 720
+    basePrice: 720,
+    ingredients: ["Brown sugar", "Caramelized butter", "Cocoa nibs", "Flaky salt"]
   },
   {
     id: "berry-brownie",
@@ -39,7 +41,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=480&q=80",
     category: "brownies",
-    basePrice: 700
+    basePrice: 700,
+    ingredients: ["Blackberry compote", "Malted barley", "Dark chocolate", "Whipped cream"]
   },
   {
     id: "starlight-cookie",
@@ -49,7 +52,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1512058564366-c9e3cdb7c3c0?auto=format&fit=crop&w=480&q=80",
     category: "cookies",
-    basePrice: 480
+    basePrice: 480,
+    ingredients: ["Cinnamon", "Cracked sugar", "Brown butter", "Cream cheese swirl"]
   },
   {
     id: "honey-rose-cookie",
@@ -59,7 +63,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=480&q=80",
     category: "cookies",
-    basePrice: 520
+    basePrice: 520,
+    ingredients: ["Honey", "Rose petals", "Almond flour", "Orange zest"]
   },
   {
     id: "matcha-chunk-cookie",
@@ -69,7 +74,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1501696351850-6b7c1ee4b1d2?auto=format&fit=crop&w=480&q=80",
     category: "cookies",
-    basePrice: 560
+    basePrice: 560,
+    ingredients: ["Matcha", "Pistachio", "White chocolate", "Butter"]
   },
   {
     id: "midnight-cake",
@@ -79,7 +85,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=480&q=80",
     category: "cake",
-    basePrice: 840
+    basePrice: 840,
+    ingredients: ["Mocha sponge", "Violet buttercream", "Candied citrus", "Sprinkles"]
   },
   {
     id: "moon-tart",
@@ -89,7 +96,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1481390967422-88a83ee5be8d?auto=format&fit=crop&w=480&q=80",
     category: "cake",
-    basePrice: 700
+    basePrice: 700,
+    ingredients: ["Charcoal crust", "Lemon curd", "Cloud meringue", "Lavender dust"]
   },
   {
     id: "hibiscus-cake",
@@ -99,7 +107,8 @@ const menu = [
     image:
       "https://images.unsplash.com/photo-1528712306091-ed0763094c98?auto=format&fit=crop&w=480&q=80",
     category: "cake",
-    basePrice: 780
+    basePrice: 780,
+    ingredients: ["Hibiscus sponge", "Rose mousse", "Feather-light chiffon"]
   }
 ].map((item) => ({
   ...item,
@@ -137,6 +146,19 @@ const cartToggleBtn = document.getElementById("cartToggle");
 const cartCountEl = document.getElementById("cartCount");
 const cartTotalEl = document.getElementById("cartTotal");
 const checkoutBtn = document.getElementById("checkoutBtn");
+const ingredientsModal = document.createElement("div");
+ingredientsModal.className = "ingredients-modal";
+ingredientsModal.innerHTML = `
+  <div class="ingredients-dialog" role="dialog" aria-modal="true">
+    <button class="ingredients-close" type="button" aria-label="Close ingredients">&times;</button>
+    <h3 id="ingredientsTitle"></h3>
+    <ul id="ingredientsList"></ul>
+  </div>
+`;
+document.body.appendChild(ingredientsModal);
+
+const ingredientsTitle = ingredientsModal.querySelector("#ingredientsTitle");
+const ingredientsList = ingredientsModal.querySelector("#ingredientsList");
 
 const cart = {};
 
@@ -191,6 +213,7 @@ const renderCard = (product) => `
       <span class="original-price">${formatPrice(product.basePrice)}</span>
       <span class="product-price">${formatPrice(product.price)}</span>
     </div>
+    <button class="info-btn" type="button" data-id="${product.id}" aria-label="Show ingredients">i</button>
     <div class="counter-controls" data-id="${product.id}">
       <button class="counter-btn" data-id="${product.id}" data-action="decrease" type="button" aria-label="Remove one">
         -
@@ -375,6 +398,19 @@ const showSnackbar = (text) => {
 };
 
 productGrid.addEventListener("click", (event) => {
+  const infoTarget = event.target.closest(".info-btn");
+  if (infoTarget) {
+    const ingredientProduct = menu.find((product) => product.id === infoTarget.dataset.id);
+    if (ingredientProduct) {
+      ingredientsTitle.textContent = `${ingredientProduct.name} ingredients`;
+      ingredientsList.innerHTML = ingredientProduct.ingredients
+        .map((ingredient) => `<li>${ingredient}</li>`)
+        .join("");
+      ingredientsModal.classList.add("open");
+    }
+    return;
+  }
+
   const actionButton = event.target.closest("button[data-id]");
   if (!actionButton) return;
   const { id, action } = actionButton.dataset;
@@ -419,6 +455,13 @@ cartScrim?.addEventListener("click", () => toggleCart(false));
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     toggleCart(false);
+    ingredientsModal.classList.remove("open");
+  }
+});
+
+ingredientsModal.addEventListener("click", (event) => {
+  if (event.target === ingredientsModal || event.target.closest(".ingredients-close")) {
+    ingredientsModal.classList.remove("open");
   }
 });
 
