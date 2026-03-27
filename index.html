@@ -18,22 +18,7 @@
     <div class="app-shell">
       <header class="hero">
         <div class="hero-image" aria-hidden="true"></div>
-        <p class="hero-kicker">soft lights, sweeter bites</p>
         <h1>Midnight Bakehouse</h1>
-        <p class="hero-lede">
-          Pastel-fresh slices, pillowy cookies, and chilled bubbly vibesâ€”everything at
-          half off while the oven is still warm.
-        </p>
-        <div class="hero-pill">
-          <span>Pickup & local delivery</span>
-          <span>Evening specials</span>
-          <span>All pastries 50% off</span>
-        </div>
-        <div class="hero-decor" aria-hidden="true">
-          <span class="hero-bubble"></span>
-          <span class="hero-bubble bubble-sm"></span>
-          <span class="hero-petal"></span>
-        </div>
       </header>
 
       <main>
@@ -47,7 +32,11 @@
           </button>
         </section>
 
-      <div id="productGrid" class="product-grid"></div>
+      <div class="carousel-wrapper">
+        <button id="scrollLeft" class="carousel-arrow" type="button" aria-label="Show previous sections">‹</button>
+        <div id="productGrid" class="product-grid"></div>
+        <button id="scrollRight" class="carousel-arrow" type="button" aria-label="Show next sections">›</button>
+      </div>
     </main>
 
       <aside class="cart-panel" id="cartPanel" aria-live="polite">
@@ -71,3 +60,5 @@
     </div>
   </body>
 </html>
+
+

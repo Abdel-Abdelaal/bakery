@@ -125,6 +125,8 @@ if (heroPill.length >= 3) {
 
 const sectionHead = document.querySelector(".section-head");
 const productGrid = document.getElementById("productGrid");
+const scrollLeftBtn = document.getElementById("scrollLeft");
+const scrollRightBtn = document.getElementById("scrollRight");
 const cartBody = document.getElementById("cartBody");
 const cartPanel = document.getElementById("cartPanel");
 const closeCart = document.getElementById("closeCart");
@@ -223,6 +225,33 @@ const renderCard = (product) => `
   </article>
 `;
 
+const updateArrowState = () => {
+  if (!productGrid || !scrollLeftBtn || !scrollRightBtn) return;
+  const maxScroll = productGrid.scrollWidth - productGrid.clientWidth;
+  const threshold = 5;
+  scrollLeftBtn.disabled = productGrid.scrollLeft <= threshold;
+  scrollRightBtn.disabled = productGrid.scrollLeft >= maxScroll - threshold || maxScroll <= 0;
+};
+
+const scrollToSection = (direction) => {
+  if (!productGrid) return;
+  const sections = Array.from(productGrid.querySelectorAll(".category-section"));
+  const current = productGrid.scrollLeft;
+  if (!sections.length) {
+    productGrid.scrollBy({ left: direction * productGrid.clientWidth * 0.7, behavior: "smooth" });
+    return;
+  }
+  const target =
+    direction > 0
+      ? sections.find((section) => section.offsetLeft > current + 5)
+      : [...sections].reverse().find((section) => section.offsetLeft < current - 5);
+  if (target) {
+    productGrid.scrollTo({ left: target.offsetLeft, behavior: "smooth" });
+  } else {
+    productGrid.scrollBy({ left: direction * productGrid.clientWidth * 0.7, behavior: "smooth" });
+  }
+};
+
 const renderProducts = () => {
   const normalized = (text) => text.toLowerCase();
   const filteredItems = menu.filter((item) => {
@@ -251,6 +280,8 @@ const renderProducts = () => {
     .join("");
 
   productGrid.innerHTML = sections || '<p class="empty-state">No treats match that search yet.</p>';
+  productGrid.scrollLeft = 0;
+  updateArrowState();
 };
 
 const updateCartDisplay = () => {
@@ -369,12 +400,17 @@ checkoutBtn.addEventListener("click", () => {
     .catch((error) => {
       console.error(error);
       showSnackbar("Could not start checkout. Try again soon.");
-    })
+  })
     .finally(() => {
       checkoutBtn.disabled = false;
       checkoutBtn.textContent = "Checkout";
     });
 });
+
+scrollLeftBtn?.addEventListener("click", () => scrollToSection(-1));
+scrollRightBtn?.addEventListener("click", () => scrollToSection(1));
+productGrid?.addEventListener("scroll", updateArrowState);
+window.addEventListener("resize", updateArrowState);
 
 createCategoryTabs();
 renderProducts();
