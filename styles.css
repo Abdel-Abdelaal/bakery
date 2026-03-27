@@ -15,7 +15,13 @@
 }
 
 .app-shell {
-  padding: 1.5rem 1rem 6rem;
+  padding: 1.2rem 0.9rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
 body {
@@ -25,8 +31,8 @@ body {
   background: linear-gradient(180deg, var(--soft-pink), var(--soft-cream));
   color: var(--text-dark);
   position: relative;
-  overflow-x: hidden;
-  padding-bottom: 140px;
+  overflow: hidden;
+  padding-bottom: 60px;
 }
 
 .glitter {
@@ -56,18 +62,18 @@ body::before {
 .hero {
   background: rgba(255, 255, 255, 0.75);
   border-radius: 20px;
-  padding: 1rem 1.25rem;
+  padding: 0.8rem 1rem;
   box-shadow: var(--shadow);
-  margin-bottom: 1.1rem;
   border: 1px solid rgba(255, 255, 255, 0.6);
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  min-height: 70px;
 }
 
 .hero h1 {
   font-family: "Fredoka", system-ui, sans-serif;
-  font-size: clamp(1.6rem, 4vw, 2rem);
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
   letter-spacing: 0.08em;
   margin: 0;
   position: relative;
@@ -92,12 +98,20 @@ body::before {
   z-index: 0;
 }
 
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
 .section-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
 }
 
 .category-tabs {
@@ -166,6 +180,7 @@ body::before {
   margin: 0.25rem 0 1rem;
   width: 100%;
   overflow: hidden;
+  justify-content: center;
 }
 
 .carousel-arrow {
@@ -197,6 +212,8 @@ body::before {
   flex: 1;
   min-width: 0;
   max-width: 100%;
+  height: min(60vh, 470px);
+  align-items: stretch;
 }
 .product-grid::-webkit-scrollbar {
   display: none;
@@ -219,6 +236,10 @@ body::before {
   max-width: min(90vw, 400px);
   flex: 0 0 auto;
   scroll-snap-align: start;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .category-heading {
@@ -242,9 +263,16 @@ body::before {
 }
 
 .category-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0.65rem;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.category-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .category-grid .product-card {
@@ -263,6 +291,8 @@ body::before {
   flex-direction: column;
   gap: 0.75rem;
   border: 1px solid rgba(140, 82, 157, 0.2);
+  width: 100%;
+  align-self: stretch;
 }
 
 .product-card::after {
