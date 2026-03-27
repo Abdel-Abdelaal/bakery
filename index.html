@@ -32,9 +32,6 @@
             <p class="section-title">Today's treats</p>
             <p class="section-subtitle">Simple, curated, ready to go</p>
           </div>
-          <button id="cartToggle" class="ghost-btn" type="button">
-            View cart (<span id="cartCount">0</span>)
-          </button>
         </section>
 
         <div class="carousel-wrapper">
@@ -73,9 +70,15 @@
             Total
             <span id="cartTotal">$0.00</span>
           </p>
-          <button id="checkoutBtn" class="checkout-btn" type="button">Order with Stripe</button>
         </div>
       </aside>
+
+      <div class="cart-actions" id="cartActions">
+        <button id="cartToggle" class="ghost-btn cart-action-btn" type="button">
+          View cart (<span id="cartCount">0</span>)
+        </button>
+        <button id="checkoutBtn" class="checkout-btn cart-action-btn" type="button">Checkout</button>
+      </div>
 
       <div class="snackbar" id="snackbar" role="status"></div>
     </div>
