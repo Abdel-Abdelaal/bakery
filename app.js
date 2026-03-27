@@ -1,10 +1,14 @@
 const discountFactor = 0.5;
 
-const categories = [
+const categoryFilters = [
+  { id: "all", label: "All" },
   { id: "brownies", label: "Brownies" },
   { id: "cookies", label: "Cookies" },
   { id: "cake", label: "Cake" }
 ];
+const categories = categoryFilters.slice(1);
+let activeCategory = "all";
+let searchTerm = "";
 
 const menu = [
   {
@@ -177,17 +181,31 @@ const createCategoryTabs = () => {
   const tabs = document.createElement("div");
   tabs.id = "categoryTabs";
   tabs.className = "category-tabs";
-  tabs.innerHTML = categories
-    .map((category, index) => `<button type="button" data-target="${category.id}"${index === 0 ? " class=\"active\"" : ""}>${category.label}</button>`)
+  tabs.innerHTML = categoryFilters
+    .map(
+      (category) => `<button type="button" data-target="${category.id}"${category.id === activeCategory ? " class=\"active\"" : ""}>${category.label}</button>`
+    )
     .join("");
   sectionHead.insertAdjacentElement("afterend", tabs);
+
+  const searchWrapper = document.createElement("div");
+  searchWrapper.className = "search-bar";
+  searchWrapper.innerHTML = `<input type="search" aria-label="Search treats" placeholder="Search treats" value="" />`;
+  tabs.insertAdjacentElement("afterend", searchWrapper);
+
+  const searchInput = searchWrapper.querySelector("input");
+  searchInput.addEventListener("input", (event) => {
+    searchTerm = event.target.value.trim().toLowerCase();
+    renderProducts();
+  });
+
   tabs.addEventListener("click", (event) => {
     const target = event.target.closest("button[data-target]");
     if (!target) return;
     tabs.querySelector(".active")?.classList.remove("active");
     target.classList.add("active");
-    const section = productGrid.querySelector(`[data-category="${target.dataset.target}"]`);
-    section?.scrollIntoView({ behavior: "smooth", block: "start" });
+    activeCategory = target.dataset.target;
+    renderProducts();
   });
 };
 
@@ -206,9 +224,18 @@ const renderCard = (product) => `
 `;
 
 const renderProducts = () => {
-  productGrid.innerHTML = categories
+  const normalized = (text) => text.toLowerCase();
+  const filteredItems = menu.filter((item) => {
+    const matchesCategory = activeCategory === "all" || item.category === activeCategory;
+    const matchesSearch = !searchTerm || normalized(item.name).includes(searchTerm) || normalized(item.desc).includes(searchTerm);
+    return matchesCategory && matchesSearch;
+  });
+
+  const sections = categories
+    .filter((category) => activeCategory === "all" || category.id === activeCategory)
     .map((category) => {
-      const items = menu.filter((item) => item.category === category.id);
+      const items = filteredItems.filter((item) => item.category === category.id);
+      if (!items.length) return "";
       return `
         <section class="category-section" data-category="${category.id}">
           <div class="category-heading">
@@ -222,6 +249,8 @@ const renderProducts = () => {
       `;
     })
     .join("");
+
+  productGrid.innerHTML = sections || '<p class="empty-state">No treats match that search yet.</p>';
 };
 
 const updateCartDisplay = () => {
@@ -347,6 +376,6 @@ checkoutBtn.addEventListener("click", () => {
     });
 });
 
+createCategoryTabs();
 renderProducts();
 updateCartDisplay();
-createCategoryTabs();
