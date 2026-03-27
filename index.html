@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+    <title>Midnight Bakehouse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <div class="glitter" aria-hidden="true"></div>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-image" aria-hidden="true"></div>
+        <p class="hero-kicker">soft lights, sweeter bites</p>
+        <h1>Midnight Bakehouse</h1>
+        <p class="hero-lede">
+          Pastel-fresh slices, pillowy cookies, and chilled bubbly vibes—everything at
+          half off while the oven is still warm.
+        </p>
+        <div class="hero-pill">
+          <span>Pickup & local delivery</span>
+          <span>Evening specials</span>
+          <span>All pastries 50% off</span>
+        </div>
+        <div class="hero-decor" aria-hidden="true">
+          <span class="hero-bubble"></span>
+          <span class="hero-bubble bubble-sm"></span>
+          <span class="hero-petal"></span>
+        </div>
+      </header>
+
+      <main>
+        <section class="section-head">
+          <div>
+            <p class="section-title">Today’s treats</p>
+            <p class="section-subtitle">Simple, curated, ready to go</p>
+          </div>
+          <button id="cartToggle" class="ghost-btn" type="button">
+            View cart (<span id="cartCount">0</span>)
+          </button>
+        </section>
+
+      <div id="productGrid" class="product-grid"></div>
+    </main>
+
+      <aside class="cart-panel" id="cartPanel" aria-live="polite">
+        <div class="cart-header">
+          <p>Your quick cart</p>
+          <button id="closeCart" class="icon-btn" type="button">✕</button>
+        </div>
+        <div class="cart-body" id="cartBody">
+          <p class="cart-empty">Add something sweet to get started.</p>
+        </div>
+        <div class="cart-footer">
+          <p>
+            Total
+            <span id="cartTotal">$0.00</span>
+          </p>
+          <button id="checkoutBtn" class="checkout-btn" type="button">Order with Stripe</button>
+        </div>
+      </aside>
+
+      <div class="snackbar" id="snackbar" role="status"></div>
+    </div>
+  </body>
+</html>
