@@ -110,7 +110,7 @@ body::before {
 .social-links {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .social-link {
@@ -131,8 +131,9 @@ body::before {
 
 .hero-logo {
   height: auto;
-  width: min(96vw, 760px);
-  max-width: none;
+  width: min(96vw, 580px);
+  max-width: 580px;
+  max-height: 8rem;
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -808,6 +809,11 @@ body.cart-open .cart-scrim {
   .product-card {
     min-height: 220px;
   }
+
+  .hero-logo {
+    width: min(88vw, 480px);
+    max-height: 7rem;
+  }
 }
 
 @media (max-width: 640px) {
@@ -848,7 +854,8 @@ body.cart-open .cart-scrim {
   }
 
   .hero-logo {
-    width: min(98vw, 520px);
+    width: min(98vw, 420px);
+    max-height: 6.5rem;
   }
 
   .app-shell {
