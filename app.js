@@ -219,7 +219,9 @@ const renderCard = (product) => `
       src="${product.image}"
       alt="${product.name}"
       loading="lazy"
-      onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 360%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop stop-color=%22%23fff2f7%22/%3E%3Cstop offset=%221%22 stop-color=%22%23eef7ff%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22600%22 height=%22360%22 rx=%2236%22 fill=%22url(%23g)%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22Arial,sans-serif%22 font-size=%2232%22 fill=%22%234a4652%22%3E${encodeURIComponent(product.name)}%3C/text%3E%3C/svg%3E';"
+      onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 360%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop stop-color=%22%23fff2f7%22/%3E%3Cstop offset=%221%22 stop-color=%22%23eef7ff%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22600%22 height=%22360%22 rx=%2236%22 fill=%22url(%23g)%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22Arial,sans-serif%22 font-size=%2232%22 fill=%22%234a4652%22%3E${encodeURIComponent(
+        product.name
+      )}%3C/text%3E%3C/svg%3E';"
     />
     <h3 class="product-name">${product.name}</h3>
     <p class="product-desc">${product.desc}</p>
@@ -227,9 +229,31 @@ const renderCard = (product) => `
       <span class="original-price">${formatPrice(product.basePrice)}</span>
       <span class="product-price">${formatPrice(product.price)}</span>
     </div>
-    <button class="add-btn" data-id="${product.id}">Add</button>
+    <div class="counter-controls" data-id="${product.id}">
+      <button class="counter-btn" data-id="${product.id}" data-action="decrease" type="button" aria-label="Remove one">
+        -
+      </button>
+      <span class="counter-value" aria-live="polite" aria-atomic="true"></span>
+      <button class="counter-btn" data-id="${product.id}" data-action="increase" type="button" aria-label="Add one">
+        +
+      </button>
+    </div>
   </article>
 `;
+
+const updateProductCounters = () => {
+  document.querySelectorAll(".counter-controls").forEach((control) => {
+    const qtySpan = control.querySelector(".counter-value");
+    const qty = cart[control.dataset.id]?.qty ?? 0;
+    if (!qty) {
+      qtySpan.textContent = "";
+      qtySpan.dataset.empty = "true";
+    } else {
+      qtySpan.textContent = qty;
+      qtySpan.dataset.empty = "false";
+    }
+  });
+};
 
 const getSections = () => Array.from(productGrid?.querySelectorAll(".category-section") ?? []);
 
@@ -317,7 +341,10 @@ const renderProducts = () => {
 
   productGrid.innerHTML = sections || '<p class="empty-state">No treats match that search yet.</p>';
   productGrid.scrollTo({ left: 0, behavior: "auto" });
-  requestAnimationFrame(updateArrowState);
+  requestAnimationFrame(() => {
+    updateArrowState();
+    updateProductCounters();
+  });
 };
 
 const updateCartDisplay = () => {
@@ -333,6 +360,7 @@ const updateCartDisplay = () => {
 
   if (!entries.length) {
     cartBody.innerHTML = '<p class="cart-empty">Add something luminous to your cart.</p>';
+    updateProductCounters();
     return;
   }
 
@@ -344,6 +372,7 @@ const updateCartDisplay = () => {
           <p class="cart-item-title">${item.name}</p>
           <p class="cart-item-desc">${formatPrice(item.price)} x ${qty}</p>
         </div>
+        <span class="cart-item-total">${formatPrice(item.price * qty)}</span>
         <div class="cart-item-controls">
           <button class="control-btn" data-id="${item.id}" data-action="decrease">-</button>
           <span>${qty}</span>
@@ -353,6 +382,7 @@ const updateCartDisplay = () => {
     `
     )
     .join("");
+  updateProductCounters();
 };
 
 const addToCart = (id) => {
@@ -381,9 +411,14 @@ const showSnackbar = (text) => {
 };
 
 productGrid.addEventListener("click", (event) => {
-  const btn = event.target.closest("button[data-id]");
-  if (!btn) return;
-  addToCart(btn.dataset.id);
+  const actionButton = event.target.closest("button[data-id]");
+  if (!actionButton) return;
+  const { id, action } = actionButton.dataset;
+  if (action === "increase") {
+    addToCart(id);
+  } else if (action === "decrease") {
+    changeQuantity(id, -1);
+  }
 });
 
 cartBody.addEventListener("click", (event) => {

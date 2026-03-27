@@ -315,6 +315,37 @@ main {
   align-self: stretch;
 }
 
+.counter-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.counter-btn {
+  border: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 10px;
+  background: rgba(140, 82, 157, 0.12);
+  color: var(--text-dark);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.counter-value {
+  min-width: 1.2rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  display: inline-block;
+}
+
+.counter-value[data-empty="true"] {
+  visibility: hidden;
+}
+
 .product-card::after {
   display: none;
 }
@@ -500,7 +531,7 @@ main {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 0.55rem 0.8rem calc(0.55rem + env(safe-area-inset-bottom));
+  padding: 0.55rem calc(0.8rem + env(safe-area-inset-right)) calc(0.55rem + env(safe-area-inset-bottom)) calc(0.8rem + env(safe-area-inset-left));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -509,6 +540,16 @@ main {
   border-top: 1px solid rgba(44, 42, 51, 0.08);
   box-shadow: 0 -10px 20px rgba(35, 32, 45, 0.1);
   z-index: 15;
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cart-item-total {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-left: auto;
 }
 
 .footer-checkout {
@@ -517,6 +558,7 @@ main {
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .footer-checkout .checkout-btn {
