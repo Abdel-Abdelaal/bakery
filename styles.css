@@ -131,9 +131,9 @@ body::before {
 
 .hero-logo {
   height: auto;
-  width: min(96vw, 1740px);
-  max-width: 1740px;
-  max-height: 24rem;
+  width: min(96vw, 3480px);
+  max-width: 3480px;
+  max-height: 48rem;
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -848,8 +848,8 @@ body.cart-open .cart-scrim {
   }
 
   .hero-logo {
-    width: min(84vw, 1440px);
-    max-height: 21rem;
+    width: min(84vw, 2880px);
+    max-height: 42rem;
   }
 }
 
@@ -891,8 +891,8 @@ body.cart-open .cart-scrim {
   }
 
   .hero-logo {
-    width: min(98vw, 1260px);
-    max-height: 20rem;
+    width: min(98vw, 2520px);
+    max-height: 40rem;
   }
 
   .app-shell {
