@@ -214,6 +214,7 @@ main {
   max-width: 100%;
   height: min(60vh, 470px);
   align-items: stretch;
+  scroll-padding: 0 2.6rem;
 }
 .product-grid::-webkit-scrollbar {
   display: none;
@@ -232,8 +233,8 @@ main {
   padding: 0.9rem 1rem 1rem;
   border: 1px solid rgba(140, 82, 157, 0.15);
   box-shadow: var(--card-shadow);
-  min-width: min(85vw, 380px);
-  max-width: min(90vw, 400px);
+  min-width: 100%;
+  max-width: 100%;
   flex: 0 0 auto;
   scroll-snap-align: start;
   height: 100%;
@@ -562,7 +563,8 @@ main {
   }
 
   .category-section {
-    min-width: min(90vw, 360px);
+    min-width: 100%;
+    max-width: 100%;
     padding: 0.8rem 0.9rem 0.9rem;
   }
 
@@ -598,3 +600,5 @@ main {
     justify-content: space-between;
   }
 }
+
+
